@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор плитки</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .card { background: #f0f0f0; padding: 20px; width: 400px; }
+        .result { margin-top: 20px; padding: 20px; background: #e8ffe8; }
+    </style>
+</head>
+<body>
+
+<h2>Калькулятор плитки</h2>
+
+<div class="card">
+<form method="post">
+
+    <label>Модель плитки:</label><br>
+    <select name="tile_index">
+        {% for t in Ptitle %}
+            <option value="{{ loop.index0 }}">{{ t.name }} ({{ t.sizemm }})</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label>Нужная квадратура (м²):</label><br>
+    <input type="number" step="0.01" name="need_m2" required><br><br>
+
+    <label>Цвет:</label><br>
+    <select name="color">
+        <option value="grey">Серый</option>
+        <option value="color">Цветной</option>
+    </select><br><br>
+
+    <button type="submit">Рассчитать</button>
+</form>
+</div>
+
+{% if result %}
+<div class="result">
+    <pre>
+📦 Заказ плитки: {{ result.tile_name }} ({{ result.color }})
+Запрошено м²: {{ "%.2f"|format(result.m2_requested) }}
+Реальные м² с округлением: {{ "%.2f"|format(result.m2_real) }}
+Количество плиток: {{ result.tiles_needed }} шт
+Общий вес: {{ "%.2f"|format(result.total_weight) }} кг
+Стоимость заказа: {{ "%.0f"|format(result.total_price) }} ₸
+Кол-во поддонов необходимо: {{ "%.0f"|format(result.kolichestvo_paddonov_nado) }} штук, (паддон+1: {{ "%.0f"|format(result.paddon_p1) }}, паддон-1: {{ "%.0f"|format(result.paddon_m1) }})
+    </pre>
+</div>
+{% endif %}
+
+</body>
+</html>
